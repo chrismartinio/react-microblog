@@ -79,7 +79,6 @@ class App extends React.Component {
   }
 
   removeComment(id) {
-    console.log('remove comment id', id);
     this.setState(st => {
       let items = [...st.blogs];
       for (let blog of items) {

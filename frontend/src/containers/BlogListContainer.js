@@ -7,7 +7,6 @@ import { getPostsFromAPI } from '../actions'
 
 
 function mapStateToProps(state) {
-  console.log('state', state);
   return { blogs: state.blogs };
 }
 

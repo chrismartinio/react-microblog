@@ -17,7 +17,6 @@ class EditPostForm extends Component {
 
   handleSubmit(e) {
     e.preventDefault();
-    console.log('id', this.props.id)
     this.props.editPost(this.state, this.props.id);
     this.props.closeEditForm();
   }

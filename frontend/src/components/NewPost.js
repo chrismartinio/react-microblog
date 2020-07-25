@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import uuid from 'uuid/v4';
 
 import { Redirect } from 'react-router-dom';
 
@@ -23,7 +24,9 @@ class NewPost extends Component {
 
   handleSubmit(e) {
     e.preventDefault();
-    this.props.add(this.state);
+    let id = uuid();
+    let { title, description } = this.state
+    this.props.newPostToAPI(title, description, id);
     this.setState({
       redirectHome: true
     })
@@ -40,7 +43,6 @@ class NewPost extends Component {
     if (this.state.redirectHome === true) {
       return <Redirect to='/' />
     }
-    console.log(this.props)
     return (
       <div>
         <h4>New Post</h4>

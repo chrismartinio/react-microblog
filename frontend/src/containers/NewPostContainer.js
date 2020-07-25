@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 
-import { add } from '../actions';
+import { add, newPostToAPI } from '../actions';
 import NewPost from '../components/NewPost';
 
 function mapStateToProps(state) {
@@ -9,7 +9,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    add: data => dispatch(add(data))
+    add: data => dispatch(add(data)),
+    newPostToAPI: (title, description, id) => dispatch(newPostToAPI(title, description, id))
   };
 }
 

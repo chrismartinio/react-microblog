@@ -16,8 +16,6 @@ class BlogList extends Component {
 
     return (
       <div>
-        <h1>bloglist</h1>
-        <pre>{JSON.stringify(this.props.blogs, null, 2)}</pre>
 
         <div className="blog-list">
         

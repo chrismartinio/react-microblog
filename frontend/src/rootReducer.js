@@ -1,43 +1,44 @@
-import { ADD, REMOVE, NEW_COMMENT, REMOVE_COMMENT, EDIT, GET_POSTS, GET_POST } from './actionTypes';
+import {
+  ADD,
+  REMOVE,
+  NEW_COMMENT,
+  REMOVE_COMMENT,
+  EDIT,
+  GET_POSTS,
+  GET_POST,
+  NEW_POST,
+  LOADING,
+  LOADED,
+  VOTE_UP,
+  VOTE_DOWN
+} from './actionTypes';
 
 const INITIAL_STATE = {
   blogs: [],
   blog: {}
-  // blogs: [
-  //   {
-  //     title: 'blog1',
-  //     description: 'a blog',
-  //     body: 'hello im a blog',
-  //     id: 'id1',
-  //     comments: [
-  //       {
-  //         comment: 'hi this is a comment',
-  //         id: 1
-  //       },
-  //       {
-  //         comment: 'so is this',
-  //         id: 2
-  //       }
-  //     ]
-  //   }
-  // ]
 };
 
 function rootReducer(state = INITIAL_STATE, action) {
+
   switch (action.type) {
+    case NEW_POST:
+      return {
+        ...state,
+        blogs: [...state.blogs, { ...action.payload }]
+      };
 
     case GET_POST:
       return {
         ...state,
-        blog: action.payload
-      }
-    
+        blog: { ...action.payload }
+      };
+
     case GET_POSTS:
       return {
         ...state,
-        blogs: action.payload
-      }
-    
+        blogs: { ...action.payload }
+      };
+
     case ADD:
       return {
         ...state,
@@ -47,63 +48,67 @@ function rootReducer(state = INITIAL_STATE, action) {
     case REMOVE:
       return {
         ...state,
-        blogs: state.blogs.filter(blog => blog.id !== action.id)
+        blogs: state.blogs.filter(blog => {
+          return blog.id !== +action.id;
+        })
       };
 
     case EDIT:
       return {
         ...state,
-        blogs: state.blogs.map(blog => {
-          if (blog.id === action.id) {
-            if (action.payload.title) {
-              blog.title = action.payload.title;
-            }
-            if (action.payload.description) {
-              blog.description = action.payload.description;
-            }
-            if (action.payload.body) {
-              blog.body = action.payload.body;
-            }
-            return blog;
-          } else return blog;
-        })
+        blog: { ...state.blog, ...action.payload }
       };
 
     case NEW_COMMENT:
+      console.log('state', state);
       return {
         ...state,
-        blogs: state.blogs.map(blog => {
-          if (blog.id === action.blogId) {
-            return {
-              ...blog,
-              comments: [
-                ...blog.comments,
-                { comment: action.newComment, id: action.id }
-              ]
-            };
-          } else {
-            return blog;
-          }
-        })
+        blog: {
+          ...state.blog, comments: [...state.blog.comments, { text: action.newComment, id: action.id }]
+        }
+      }
+    
+    case LOADING:
+      console.log('loading');
+      return {
+        ...state,
+        blog: { ...state.blog, loading: true }
       };
+    
+    case LOADED:
+      console.log('loaded');
+      return {
+        ...state,
+        blog: { ...state.blog, loading: false }
+      }
 
     case REMOVE_COMMENT:
       return {
         ...state,
-        blogs: state.blogs.map(blog => {
-          if (blog.id === action.blogId) {
-            return {
-              ...blog,
-              comments: blog.comments.filter(
-                comment => comment.id !== action.commentId
-              )
-            };
-          } else {
-            return blog;
-          }
-        })
-      };
-
+        blog: {
+          ...state.blog,
+          comments: state.blog.comments.filter(
+            comment => comment.id !== action.commentId
+          )
+        }
+      }
+    
+    case VOTE_UP:
+      return {
+        ...state,
+        blog: {
+          ...state.blog, votes: state.blog.votes + 1
+        }
+      }
+    
+    case VOTE_DOWN:
+      return {
+        ...state,
+        blog: {
+          ...state.blog, votes: state.blog.votes - 1
+        }
+      }
+    
     default:
       return state;
   }
